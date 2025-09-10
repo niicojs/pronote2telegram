@@ -1,19 +1,24 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
-import { addWeeks, format, isAfter, isEqual } from 'date-fns';
+import { addWeeks, format, isAfter, isEqual, startOfToday } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import * as pronote from '@niicojs/pawnote';
+import Turndown from 'turndown';
 import type { Config } from './config.ts';
 import { getWeekNumber } from './utils.ts';
-import { fr } from 'date-fns/locale';
-import Telegram from './telegram.ts';
+import Telegram, { escape } from './telegram.ts';
 
 export async function handlePronote(config: Config) {
   console.log('Login...');
   const handle = await login(config);
-  console.log('Devoirs...');
-  await devoirs(config, handle);
-  console.log('Emplois du temps...');
-  await emploiDuTemps(config, handle);
+  if (config.run.assignements) {
+    console.log('Devoirs...');
+    await devoirs(config, handle);
+  }
+  if (config.run.timetable) {
+    console.log('Emplois du temps...');
+    await emploiDuTemps(config, handle);
+  }
 }
 
 async function login(config: Config) {
@@ -42,16 +47,34 @@ async function login(config: Config) {
 async function devoirs(config: Config, handle: pronote.SessionHandle) {
   const week = getWeekNumber();
   const assignments = await pronote.assignmentsFromWeek(handle, week, week);
-  for (const assignment of assignments) {
+  writeFileSync('assignements.json', JSON.stringify(assignments), 'utf8');
+
+  const todo = assignments
+    .filter((d) => !d.done && isAfter(d.deadline, startOfToday()))
+    .toSorted((a, b) => (isAfter(b.deadline, a.deadline) ? -1 : 1));
+  if (todo.length === 0) return;
+
+  const turndown = new Turndown();
+  turndown.escape = escape;
+
+  let msg = '';
+
+  for (const assignment of todo) {
     const devoir = {
       classe: assignment.subject.name,
-      description: assignment.description,
-      deadline: new Date(assignment.deadline),
-      done: assignment.done,
+      description: turndown.turndown(assignment.description),
+      deadline: assignment.deadline,
+      when: format(assignment.deadline, 'eeee dd', { locale: fr }),
     };
+    msg += `*\\[${devoir.when}\\] ${escape(devoir.classe)}*\n${devoir.description}\n`;
     console.log('', devoir);
   }
-  writeFileSync('assignements.json', JSON.stringify(assignments), 'utf8');
+
+  console.log(msg);
+
+  const telegram = Telegram(config);
+  const kid = handle.userResource.name;
+  await telegram.sendMessage(kid, 'DEVOIRS', msg, true);
 }
 
 type TimetableHistory = { classe: string; date: string };
@@ -82,15 +105,15 @@ async function emploiDuTemps(config: Config, handle: pronote.SessionHandle) {
   for (const classe of annules) {
     if (!history.find((h) => isEqual(h.date, classe.startDate))) {
       const when = format(classe.startDate, 'eeee à hh:mm', { locale: fr });
-      console.log('annulé :', classe.subject?.name, when);
+      console.log('  annulé :', classe.subject?.name, when);
       history.push({
         classe: classe.subject?.name || '??',
         date: classe.startDate.toISOString(),
       });
       if (classe.canceled) {
-        await telegram.sendMessageHTML(kid, 'Cours Annulé', `${classe.subject?.name}, ${when}`);
+        await telegram.sendMessage(kid, 'Cours Annulé', `${classe.subject?.name}, ${when}`);
       } else if (classe.status === 'Permanence') {
-        await telegram.sendMessageHTML(kid, 'Permanence', when);
+        await telegram.sendMessage(kid, 'Permanence', when);
       }
     }
   }

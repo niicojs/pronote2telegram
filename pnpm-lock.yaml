@@ -23,21 +23,33 @@ importers:
       smol-toml:
         specifier: ^1.4.2
         version: 1.4.2
+      turndown:
+        specifier: ^7.2.1
+        version: 7.2.1
     devDependencies:
       '@types/node':
         specifier: ^24.3.1
         version: 24.3.1
+      '@types/turndown':
+        specifier: ^5.0.5
+        version: 5.0.5
 
 packages:
 
   '@literate.ink/utilities@1.0.0-10641118381.1':
     resolution: {integrity: sha512-omhzgwfAjNXqIjt6dmWbU8pm6QfEvNYetykEXYk+vVaJ8oICglvkChxkC6FkF8zJKMM/lFrNHgD42obQ8lwolQ==}
 
+  '@mixmark-io/domino@2.2.0':
+    resolution: {integrity: sha512-Y28PR25bHXUg88kCV7nivXrP2Nj2RueZ3/l/jdx6J9f8J4nsEGcgX0Qe6lt7Pa+J79+kPiJU3LguR6O/6zrLOw==}
+
   '@niicojs/pawnote@1.6.1':
     resolution: {integrity: sha512-tVJUFDo7mb9wuK9DhrPFraOzf6agdMfpK2lPPFMidVVN3W0sj2PL+jbxTjiG1GPxr8W/si4wi9Zp7gJ38RV/VQ==}
 
   '@types/node@24.3.1':
     resolution: {integrity: sha512-3vXmQDXy+woz+gnrTvuvNrPzekOi+Ds0ReMxw0LzBiK3a+1k0kQn9f2NWk+lgD4rJehFUmYy2gMhJ2ZI+7YP9g==}
+
+  '@types/turndown@5.0.5':
+    resolution: {integrity: sha512-TL2IgGgc7B5j78rIccBtlYAnkuv8nUQqhQc+DSYV5j9Be9XOcm/SKOVRuA47xAVI3680Tk9B1d8flK2GWT2+4w==}
 
   date-fns@4.1.0:
     resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
@@ -72,6 +84,9 @@ packages:
     resolution: {integrity: sha512-rInDH6lCNiEyn3+hH8KVGFdbjc099j47+OSgbMrfDYX1CmXLfdKd7qi6IfcWj2wFxvSVkuI46M+wPGYfEOEj6g==}
     engines: {node: '>= 18'}
 
+  turndown@7.2.1:
+    resolution: {integrity: sha512-7YiPJw6rLClQL3oUKN3KgMaXeJJ2lAyZItclgKDurqnH61so4k4IH/qwmMva0zpuJc/FhRExBBnk7EbeFANlgQ==}
+
   ufo@1.6.1:
     resolution: {integrity: sha512-9a4/uxlTWJ4+a5i0ooc1rU7C7YOw3wT+UGqdeNNHWnOF9qcMBgLRS+4IYUqbczewFx4mLEig6gawh7X6mFlEkA==}
 
@@ -84,6 +99,8 @@ snapshots:
     dependencies:
       set-cookie-parser: 2.7.1
 
+  '@mixmark-io/domino@2.2.0': {}
+
   '@niicojs/pawnote@1.6.1':
     dependencies:
       '@literate.ink/utilities': 1.0.0-10641118381.1
@@ -94,6 +111,8 @@ snapshots:
   '@types/node@24.3.1':
     dependencies:
       undici-types: 7.10.0
+
+  '@types/turndown@5.0.5': {}
 
   date-fns@4.1.0: {}
 
@@ -118,6 +137,10 @@ snapshots:
   set-cookie-parser@2.7.1: {}
 
   smol-toml@1.4.2: {}
+
+  turndown@7.2.1:
+    dependencies:
+      '@mixmark-io/domino': 2.2.0
 
   ufo@1.6.1: {}
 

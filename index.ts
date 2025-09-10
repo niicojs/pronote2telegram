@@ -11,6 +11,8 @@ const home = options.home || '.';
 
 console.log('Load config...');
 const config = getConfig(home);
+config.run.assignements = !!options.assignements;
+config.run.timetable = !!options.timetable;
 
 const lockFile = initLockFile(config);
 try {

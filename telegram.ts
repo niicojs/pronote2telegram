@@ -14,7 +14,7 @@ function chunk<T>(items: T[], size: number) {
   return chunks;
 }
 
-const escape = (text: string) => {
+export const escape = (text: string) => {
   if (!text) return '\\.';
   return text.replace(/(\_|\*|\[|\]|\(|\)|\~|\`|\>|\#|\+|\-|\=|\||\{|\}|\.|\!)/g, '\\$1');
 };
@@ -98,15 +98,15 @@ export default function Telegram(config: Config) {
     }
   };
 
-  const sendMessageHTML = async (child: string, subject: string, msg: string) => {
+  const sendMessage = async (child: string, subject: string, msg: string, isMd = false) => {
     await throttle();
+    if (!isMd) msg = escape(msg);
     await client('sendMessage', {
       body: {
         chat_id: chatId,
-        parse_mode: 'HTML',
-        text: `
-<b>PRONOTE - ${child}</b>  
-<b>${subject}</b>  
+        parse_mode: 'MarkdownV2',
+        text: `*__PRONOTE \\- ${child}__*  
+*${escape(subject)}*  
 ${msg}`,
       },
     });
@@ -166,5 +166,5 @@ ${post.html}`,
     }
   };
 
-  return { client, sendPostMessage, sendMessageHTML };
+  return { client, sendPostMessage, sendMessage };
 }

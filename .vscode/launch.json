@@ -7,6 +7,7 @@
       "name": "Launch Program",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/index.ts",
+      "args": ["--assignements"],
       "outFiles": ["${workspaceFolder}/**/*.js"]
     }
   ]
