@@ -1,0 +1,24 @@
+{
+  "name": "pronote2telegram",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {},
+  "packageManager": "pnpm@10.15.1",
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 100
+  },
+  "pnpm": {},
+  "dependencies": {
+    "@niicojs/pawnote": "^1.6.1",
+    "date-fns": "^4.1.0",
+    "mri": "^1.2.0",
+    "ofetch": "^1.4.1",
+    "smol-toml": "^1.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1"
+  }
+}
