@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { writeFileSync } from 'node:fs';
-import * as pronote from 'pawnote';
+import * as pronote from '@niicojs/pawnote';
 
 const deviceUUID = randomUUID();
 const handle = pronote.createSessionHandle();
