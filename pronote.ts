@@ -111,7 +111,7 @@ async function emploiDuTemps(config: Config, handle: pronote.SessionHandle) {
 
   for (const classe of annules) {
     if (!history.find((h) => isEqual(h.date, classe.startDate))) {
-      const when = format(classe.startDate, 'eeee à hh:mm', { locale: fr });
+      const when = format(classe.startDate, 'eeee à HH:mm', { locale: fr });
       console.log('  annulé :', classe.subject?.name, when);
       history.push({
         classe: classe.subject?.name || '??',

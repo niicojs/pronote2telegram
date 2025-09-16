@@ -122,7 +122,7 @@ ${msg}`,
         text: `
 <b>PRONOTE - ${post.child}</b>  
 ${post.type || ''}${post.from ? `de ${post.from}` : ''}  
-${format(post.date, `'Le' dd/MM/yy 'à' hh:mm:ss`)}  
+${format(post.date, `'Le' dd/MM/yy 'à' HH:mm:ss`)}  
 <b>${post.subject}</b>  
 ${post.html}`,
       },
