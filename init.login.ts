@@ -17,3 +17,5 @@ const refresh = await pronote.loginQrCode(handle, {
 
 const nextlogin = { deviceUUID, ...refresh };
 writeFileSync('login.json', JSON.stringify(nextlogin, null, 2), 'utf-8');
+
+console.log('done.');

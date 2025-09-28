@@ -69,15 +69,15 @@ async function devoirs(config: Config, handle: pronote.SessionHandle) {
     msg += `*\\[${devoir.when}\\] ${escape(devoir.classe)}*\n${devoir.description}\n`;
     for (const attach of assignment.attachments) {
       if (attach.kind === pronote.AttachmentKind.Link) {
-        msg += `\n[${escape(attach.name || attach.url)}](${attach.url})`;
+        msg += `\n[${escape(attach.name || attach.url)}](${attach.url})\n`;
       } else if (attach.kind === pronote.AttachmentKind.File) {
-        msg += `\npiece jointe: ${escape(attach.name)}`;
+        msg += `\n[${escape(attach.name || attach.url)}](${attach.url})\n`;
       }
     }
     console.log('', devoir);
   }
 
-  console.log(msg);
+  // console.log(msg);
 
   const telegram = Telegram(config);
   const kid = handle.userResource.name;
