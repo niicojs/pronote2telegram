@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
-import { addWeeks, format, isAfter, isEqual, startOfToday } from 'date-fns';
+import { addWeeks, addYears, format, isAfter, isEqual, startOfToday } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import * as pronote from '@niicojs/pawnote';
 import Turndown from 'turndown';
@@ -18,6 +18,10 @@ export async function handlePronote(config: Config) {
   if (config.run.timetable) {
     console.log('Emplois du temps...');
     await emploiDuTemps(config, handle);
+  }
+  if (config.run.grades) {
+    console.log('Notes...');
+    await notes(config, handle);
   }
 }
 
@@ -47,7 +51,7 @@ async function login(config: Config) {
 async function devoirs(config: Config, handle: pronote.SessionHandle) {
   const week = getWeekNumber();
   const assignments = await pronote.assignmentsFromWeek(handle, week, week);
-  writeFileSync('assignements.json', JSON.stringify(assignments), 'utf8');
+  // writeFileSync('assignements.json', JSON.stringify(assignments), 'utf8');
 
   const todo = assignments
     .filter((d) => !d.done && isAfter(d.deadline, startOfToday()))
@@ -125,6 +129,53 @@ async function emploiDuTemps(config: Config, handle: pronote.SessionHandle) {
     }
   }
 
-  writeFileSync(path.join(config.home, 'timetable.json'), JSON.stringify(timetable), 'utf8');
+  // writeFileSync(path.join(config.home, 'timetable.json'), JSON.stringify(timetable), 'utf8');
   writeFileSync(path.join(config.home, 'timetable-history.json'), JSON.stringify(history), 'utf8');
+}
+
+type GradeHistory = { id: string; date: string };
+async function notes(config: Config, handle: pronote.SessionHandle) {
+  let history: GradeHistory[] = [];
+  const historyfile = path.join(config.home, 'grades-history.json');
+  if (existsSync(historyfile)) {
+    const old = addYears(new Date(), -1);
+    history = JSON.parse(readFileSync(historyfile, 'utf-8'));
+    history = history.filter((h) => isAfter(h.date, old));
+  }
+
+  const tab = handle.userResource.tabs.get(pronote.TabLocation.Grades);
+  if (!tab) throw new Error('no grades tab');
+  const selectedPeriod = tab.defaultPeriod!;
+  console.log('Period:', selectedPeriod.name);
+
+  const overview = await pronote.gradesOverview(handle, selectedPeriod);
+
+  const messages = [];
+  for (const grade of overview.grades) {
+    if (history.find((h) => h.id === grade.id)) continue;
+    history.push({ id: grade.id, date: grade.date.toISOString() });
+
+    let name = format(grade.date, 'dd/MM', { locale: fr }) + ' ' + grade.subject.name;
+    if (grade.comment) name += ' (' + grade.comment + ')';
+    let value = '';
+    if (grade.value.kind === pronote.GradeKind.Grade) {
+      value = grade.value.points.toString();
+      if (typeof grade.outOf.points === 'number') value += '/' + grade.outOf.points;
+    } else if (grade.value.kind === pronote.GradeKind.Absent) {
+      value = 'Absent';
+    }
+
+    console.log(`${name} - ${value}`);
+    messages.push(`${name} - ${value}`);
+  }
+
+  if (messages.length > 0) {
+    const telegram = Telegram(config);
+    const kid = handle.userResource.name;
+    const s = messages.length > 1 ? 's' : '';
+    await telegram.sendMessage(kid, `Nouvelle${s} Note${s}`, messages.join('\n'));
+  }
+
+  writeFileSync(path.join(config.home, 'grades.json'), JSON.stringify(overview.grades), 'utf8');
+  writeFileSync(path.join(config.home, 'grades-history.json'), JSON.stringify(history), 'utf8');
 }

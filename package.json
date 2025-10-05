@@ -12,7 +12,7 @@
   },
   "pnpm": {},
   "dependencies": {
-    "@niicojs/pawnote": "^1.6.1",
+    "@niicojs/pawnote": "^1.6.2",
     "date-fns": "^4.1.0",
     "mri": "^1.2.0",
     "ofetch": "^1.4.1",
@@ -20,7 +20,7 @@
     "turndown": "^7.2.1"
   },
   "devDependencies": {
-    "@types/node": "^24.5.2",
+    "@types/node": "^24.6.2",
     "@types/turndown": "^5.0.5"
   }
 }
