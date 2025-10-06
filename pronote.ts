@@ -133,7 +133,7 @@ async function emploiDuTemps(config: Config, handle: pronote.SessionHandle) {
   writeFileSync(path.join(config.home, 'timetable-history.json'), JSON.stringify(history), 'utf8');
 }
 
-type GradeHistory = { id: string; date: string };
+type GradeHistory = { key: string; date: string };
 async function notes(config: Config, handle: pronote.SessionHandle) {
   let history: GradeHistory[] = [];
   const historyfile = path.join(config.home, 'grades-history.json');
@@ -151,10 +151,9 @@ async function notes(config: Config, handle: pronote.SessionHandle) {
   const overview = await pronote.gradesOverview(handle, selectedPeriod);
 
   const messages = [];
-  for (const grade of overview.grades) {
-    if (history.find((h) => h.id === grade.id)) continue;
-    history.push({ id: grade.id, date: grade.date.toISOString() });
+  const done = new Set();
 
+  for (const grade of overview.grades) {
     let name = format(grade.date, 'dd/MM', { locale: fr }) + ' ' + grade.subject.name;
     if (grade.comment) name += ' (' + grade.comment + ')';
     let value = '';
@@ -164,6 +163,18 @@ async function notes(config: Config, handle: pronote.SessionHandle) {
     } else if (grade.value.kind === pronote.GradeKind.Absent) {
       value = 'Absent';
     }
+
+    let cnt = 1;
+    let key = `${name} - ${grade.date.toISOString()} - ${value} - ${cnt}`;
+    while (done.has(key)) {
+      cnt += 1;
+      key = `${name} - ${grade.date.toISOString()} - ${value} - ${cnt}`;
+    }
+    done.add(key);
+
+    if (history.find((h) => h.key === key)) continue;
+    
+    history.push({ key, date: grade.date.toISOString() });
 
     console.log(`${name} - ${value}`);
     messages.push(`${name} - ${value}`);
