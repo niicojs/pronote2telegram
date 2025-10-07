@@ -22,6 +22,8 @@ export async function handlePronote(config: Config) {
   if (config.run.grades) {
     console.log('Notes...');
     await notes(config, handle);
+    console.log('Bulletin...');
+    await gradebook(config, handle);
   }
 }
 
@@ -173,7 +175,7 @@ async function notes(config: Config, handle: pronote.SessionHandle) {
     done.add(key);
 
     if (history.find((h) => h.key === key)) continue;
-    
+
     history.push({ key, date: grade.date.toISOString() });
 
     console.log(`${name} - ${value}`);
@@ -187,6 +189,21 @@ async function notes(config: Config, handle: pronote.SessionHandle) {
     await telegram.sendMessage(kid, `Nouvelle${s} Note${s}`, messages.join('\n'));
   }
 
-  writeFileSync(path.join(config.home, 'grades.json'), JSON.stringify(overview.grades), 'utf8');
+  // writeFileSync(path.join(config.home, 'grades.json'), JSON.stringify(overview.grades), 'utf8');
   writeFileSync(path.join(config.home, 'grades-history.json'), JSON.stringify(history), 'utf8');
+}
+
+async function gradebook(config: Config, handle: pronote.SessionHandle) {
+  const tab = handle.userResource.tabs.get(pronote.TabLocation.Gradebook);
+  if (!tab) throw new Error('no gradebook tab');
+  const selectedPeriod = tab.defaultPeriod!;
+  console.log('Period:', selectedPeriod.name);
+
+  try {
+    const url = await pronote.gradebookPDF(handle, selectedPeriod);
+    console.log('Gradebook URL:', url);
+  } catch (e) {
+    if (e instanceof Error) console.log(e.message);
+    else console.error(e);
+  }
 }
