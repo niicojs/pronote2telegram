@@ -20,7 +20,7 @@
     "turndown": "^7.2.1"
   },
   "devDependencies": {
-    "@types/node": "^24.6.2",
+    "@types/node": "^24.7.1",
     "@types/turndown": "^5.0.5"
   }
 }

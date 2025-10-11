@@ -4,7 +4,34 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "News",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/index.ts",
+      "args": ["--news"],
+      "outFiles": ["${workspaceFolder}/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Assignements",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/index.ts",
+      "args": ["--assignements"],
+      "outFiles": ["${workspaceFolder}/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Timetable",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/index.ts",
+      "args": ["--timetable"],
+      "outFiles": ["${workspaceFolder}/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Grades",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/index.ts",
       "args": ["--grades"],

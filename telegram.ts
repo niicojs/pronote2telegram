@@ -16,7 +16,7 @@ function chunk<T>(items: T[], size: number) {
 
 export const escape = (text: string) => {
   if (!text) return '\\.';
-  return text.replace(/(\_|\*|\[|\]|\(|\)|\~|\`|\>|\#|\+|\-|\=|\||\{|\}|\.|\!)/g, '\\$1');
+  return text.replace(/(_|\*|\[|\]|\(|\)|~|`|>|#|\+|-|=|\||\{|\}|\.|!)/g, '\\$1');
 };
 
 type Attach = { name: string; type: string; data: Blob };
@@ -58,6 +58,7 @@ export default function Telegram(config: Config) {
       }
     },
     retryStatusCodes: [408, 429, 503, 504],
+    timeout: 20_000,
   });
 
   const sendAttachments = async (files: Attach[], type: string) => {

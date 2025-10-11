@@ -25,6 +25,10 @@ export async function handlePronote(config: Config) {
     console.log('Bulletin...');
     await gradebook(config, handle);
   }
+  if (config.run.news) {
+    console.log('News...');
+    await news(config, handle);
+  }
 }
 
 async function login(config: Config) {
@@ -206,4 +210,49 @@ async function gradebook(config: Config, handle: pronote.SessionHandle) {
     if (e instanceof Error) console.log(e.message);
     else console.error(e);
   }
+}
+
+type NewsHistory = { key: string; date: string };
+async function news(config: Config, handle: pronote.SessionHandle) {
+  let history: NewsHistory[] = [];
+  const historyfile = path.join(config.home, 'news-history.json');
+  if (existsSync(historyfile)) {
+    const old = addYears(new Date(), -1);
+    history = JSON.parse(readFileSync(historyfile, 'utf-8'));
+    history = history.filter((h) => isAfter(h.date, old));
+  }
+
+  const tab = handle.userResource.tabs.get(pronote.TabLocation.Notebook);
+  if (!tab) throw new Error('no news tab');
+  const selectedPeriod = tab.defaultPeriod!;
+
+  const messages = [];
+
+  const done = new Set();
+  const notebook = await pronote.notebook(handle, selectedPeriod);
+  for (const o of notebook.observations) {
+    let name = o.name;
+    if (o.subject) name += ' - ' + o.subject.name;
+    let date = format(o.date, 'dd/MM', { locale: fr });
+
+    let cnt = 1;
+    let key = `${name} - ${date} - ${cnt}`;
+    while (done.has(key)) key = `${name} - ${date} - ${++cnt}`;
+    done.add(key);
+
+    if (history.find((h) => h.key === key)) continue;
+
+    history.push({ key, date: o.date.toISOString() });
+    messages.push(`${date} ${name}`);
+    console.log(`${date} ${name}`);
+  }
+
+  if (messages.length > 0) {
+    const telegram = Telegram(config);
+    const kid = handle.userResource.name;
+    const s = messages.length > 1 ? 's' : '';
+    await telegram.sendMessage(kid, `Nouvelle${s} Observation${s}`, messages.join('\n'));
+  }
+
+  writeFileSync(path.join(config.home, 'news-history.json'), JSON.stringify(history), 'utf8');
 }

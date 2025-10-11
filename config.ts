@@ -18,6 +18,7 @@ export default function getConfig(home: string) {
       assignements: false,
       timetable: false,
       grades: false,
+      news: false,
     },
     telegram: {
       throttling: 1500,

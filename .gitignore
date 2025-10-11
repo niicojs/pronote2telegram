@@ -4,3 +4,4 @@ node_modules
 /timetable*.json
 /assignements*.json
 /grades*.json
+/news*.json

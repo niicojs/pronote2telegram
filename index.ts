@@ -14,6 +14,7 @@ const config = getConfig(home);
 config.run.assignements = !!options.assignements;
 config.run.timetable = !!options.timetable;
 config.run.grades = !!options.grades;
+config.run.news = !!options.news;
 
 const lockFile = initLockFile(config);
 try {
