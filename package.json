@@ -5,7 +5,7 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {},
-  "packageManager": "pnpm@10.15.1",
+  "packageManager": "pnpm@10.22.0",
   "prettier": {
     "singleQuote": true,
     "printWidth": 100
@@ -15,12 +15,12 @@
     "@niicojs/pawnote": "^1.6.2",
     "date-fns": "^4.1.0",
     "mri": "^1.2.0",
-    "ofetch": "^1.4.1",
-    "smol-toml": "^1.4.2",
-    "turndown": "^7.2.1"
+    "ofetch": "^1.5.1",
+    "smol-toml": "^1.5.2",
+    "turndown": "^7.2.2"
   },
   "devDependencies": {
-    "@types/node": "^24.7.1",
-    "@types/turndown": "^5.0.5"
+    "@types/node": "^24.10.1",
+    "@types/turndown": "^5.0.6"
   }
 }

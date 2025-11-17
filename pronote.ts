@@ -162,7 +162,7 @@ async function notes(config: Config, handle: pronote.SessionHandle) {
   for (const grade of overview.grades) {
     let name = format(grade.date, 'dd/MM', { locale: fr }) + ' ' + grade.subject.name;
     if (grade.comment) name += ' (' + grade.comment + ')';
-    let value = '';
+    let value = '?';
     if (grade.value.kind === pronote.GradeKind.Grade) {
       value = grade.value.points.toString();
       if (typeof grade.outOf.points === 'number') value += '/' + grade.outOf.points;
