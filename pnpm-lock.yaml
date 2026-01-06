@@ -21,15 +21,15 @@ importers:
         specifier: ^1.5.1
         version: 1.5.1
       smol-toml:
-        specifier: ^1.5.2
-        version: 1.5.2
+        specifier: ^1.6.0
+        version: 1.6.0
       turndown:
         specifier: ^7.2.2
         version: 7.2.2
     devDependencies:
       '@types/node':
-        specifier: ^24.10.1
-        version: 24.10.1
+        specifier: ^25.0.3
+        version: 25.0.3
       '@types/turndown':
         specifier: ^5.0.6
         version: 5.0.6
@@ -45,8 +45,8 @@ packages:
   '@niicojs/pawnote@1.6.2':
     resolution: {integrity: sha512-OK6NaQzsxYWdgdcrfsRXFZaMBYDhr5Ibk/BW3vqJ7dlMMS6WyxXl/SVH5t3xEE7DlCXH33LN7SEFWJ9W39f0ag==}
 
-  '@types/node@24.10.1':
-    resolution: {integrity: sha512-GNWcUTRBgIRJD5zj+Tq0fKOJ5XZajIiBroOF0yvj2bSU1WvNdYS/dn9UxwsujGW4JX06dnHyjV2y9rRaybH0iQ==}
+  '@types/node@25.0.3':
+    resolution: {integrity: sha512-W609buLVRVmeW693xKfzHeIV6nJGGz98uCPfeXI1ELMLXVeKYZ9m15fAMSaUPBHYLGFsVRcMmSCksQOrZV9BYA==}
 
   '@types/turndown@5.0.6':
     resolution: {integrity: sha512-ru00MoyeeouE5BX4gRL+6m/BsDfbRayOskWqUvh7CLGW+UXxHQItqALa38kKnOiZPqJrtzJUgAC2+F0rL1S4Pg==}
@@ -80,8 +80,8 @@ packages:
   set-cookie-parser@2.7.1:
     resolution: {integrity: sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ==}
 
-  smol-toml@1.5.2:
-    resolution: {integrity: sha512-QlaZEqcAH3/RtNyet1IPIYPsEWAaYyXXv1Krsi+1L/QHppjX4Ifm8MQsBISz9vE8cHicIq3clogsheili5vhaQ==}
+  smol-toml@1.6.0:
+    resolution: {integrity: sha512-4zemZi0HvTnYwLfrpk/CF9LOd9Lt87kAt50GnqhMpyF9U3poDAP2+iukq2bZsO/ufegbYehBkqINbsWxj4l4cw==}
     engines: {node: '>= 18'}
 
   turndown@7.2.2:
@@ -108,7 +108,7 @@ snapshots:
       node-forge: 1.3.1
       pako: 2.1.0
 
-  '@types/node@24.10.1':
+  '@types/node@25.0.3':
     dependencies:
       undici-types: 7.16.0
 
@@ -136,7 +136,7 @@ snapshots:
 
   set-cookie-parser@2.7.1: {}
 
-  smol-toml@1.5.2: {}
+  smol-toml@1.6.0: {}
 
   turndown@7.2.2:
     dependencies:

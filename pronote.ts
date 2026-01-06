@@ -168,6 +168,11 @@ async function notes(config: Config, handle: pronote.SessionHandle) {
       if (typeof grade.outOf.points === 'number') value += '/' + grade.outOf.points;
     } else if (grade.value.kind === pronote.GradeKind.Absent) {
       value = 'Absent';
+    } else if (grade.value.kind === pronote.GradeKind.NotGraded) {
+      value = 'Non noté';
+    } else {
+      console.log('Unknown grade kind:', grade.value.kind);
+      console.log(grade);
     }
 
     let cnt = 1;
